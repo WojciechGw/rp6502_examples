@@ -28,7 +28,6 @@
                 ]
             },
             "program": "${command:cmake.launchTargetPath}.rp6502",
-            "dbg": "${command:cmake.launchTargetPath}.dbg",
             "stopOnEntry": false,
             "stopOnExit": true
         },
