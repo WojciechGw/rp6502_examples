@@ -28,13 +28,17 @@ void print(bool enabled, const char *str)
     }
 }
 
+/* DPAD bits 4-5: where the face button labels sit. */
+#define PAD_TYPE_PLAYSTATION 3
+
 void show(int player)
 {
     const char *dpad[] = {"0 ", "N ", "S ", "ER",
                           "W ", "NW", "SW", "ER",
                           "E ", "NE", "SE", "ER",
                           "ER", "ER", "ER", "ER"};
-    uint8_t hat, sticks, btns0, btns1;
+    const char *types[] = {"?? ", "AB ", "BA ", "PS "};
+    uint8_t hat, sticks, btns0, btns1, type;
 
     printf("P%d ", player);
 
@@ -50,6 +54,9 @@ void show(int player)
     printf("R:%s ", dpad[(sticks & 0xF0) >> 4]);
     printf("H:%s ", dpad[hat & 0xF]);
 
+    type = (hat >> 4) & 0x03;
+    printf("%s%s ", types[type], (hat & 0x40) ? "2S" : "  ");
+
     if (!(hat & 0x80))
     {
         printf("\33[K\n\033[90m   Disconnected\033[0m\33[K\n\n");
@@ -58,7 +65,7 @@ void show(int player)
 
     printf("\n   ");
 
-    if (hat & 0x40)
+    if (type == PAD_TYPE_PLAYSTATION)
     {
         print(btns0 & 0x01, "Cross");
         print(btns0 & 0x02, "Circle");
